@@ -1,0 +1,79 @@
+# Clone project
+git clone https://github.com/Kumbhambharagavi75/FoodSystem.git
+cd FoodSystem
+
+# Build Maven app Docker image
+docker build -t foodsystem-app .
+
+# Run Maven app container on 8080
+docker run -d -p 8080:8080 --name foodsystem-container foodsystem-app
+
+# Pull nginx image
+docker pull nginx:latest
+
+# Run nginx on host 8090
+docker run -d -p 8090:80 --name mynginx nginx:latest
+
+# Check which host port maps to container port 8080
+docker ps
+
+# Stop running container (example: myapp)
+docker stop myapp
+
+# Run web app exposing internal 5000 to host 8080
+docker run -d -p 8080:5000 --name webapp foodsystem-app
+
+# Run python container
+docker run -it --name mypython python:latest
+
+# List all containers
+docker ps -a
+
+# Kill process if port 8080 conflict
+sudo lsof -i :8080
+kill -9 <PID>
+
+# Run app on different port if 8080 conflict (9090)
+docker run -d -p 9090:8080 --name foodsystem9090 foodsystem-app
+
+# Exec into container
+docker exec -it foodsystem-container /bin/bash
+
+# Check container status
+docker ps
+docker ps -a
+
+# ---------------- Docker Compose ----------------
+# Create docker-compose.yml
+cat <<EOF > docker-compose.yml
+version: "3"
+services:
+  foodsystem:
+    image: foodsystem-app
+    container_name: foodsystem-container
+    ports:
+      - "7078:8080"
+    depends_on:
+      - db
+
+  db:
+    image: postgres:latest
+    container_name: postgres-db
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin123
+      POSTGRES_DB: fooddb
+    ports:
+      - "5432:5432"
+EOF
+
+# Run docker-compose
+docker-compose up -d
+
+# Verify containers
+docker ps
+
+# Insert data into PostgreSQL
+docker exec -it postgres-db psql -U admin -d fooddb -c "CREATE TABLE orders(id SERIAL PRIMARY KEY, item VARCHAR(50));"
+docker exec -it postgres-db psql -U admin -d fooddb -c "INSERT INTO orders(item) VALUES ('Pizza'), ('Burger');"
+docker exec -it postgres-db psql -U admin -d fooddb -c "SELECT * FROM orders;"
