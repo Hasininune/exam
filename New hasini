@@ -1,0 +1,51 @@
+# Step 1: Build Maven project
+mvn clean install
+
+# Step 2: Build Docker image for your CampusMgmtSystem
+docker build -t yourusername/campusmgmtsystem .
+
+# Step 3: Push image to Docker Hub
+docker login
+docker tag yourusername/campusmgmtsystem yourusername/campusmgmtsystem:latest
+docker push yourusername/campusmgmtsystem:latest
+
+# Step 4: Create docker-compose.yml
+cat > docker-compose.yml <<EOF
+version: "3.9"
+
+services:
+  tomcatserver:
+    image: tomcat:9.0
+    container_name: tomcatserver
+    ports:
+      - "8086:8080"
+    networks:
+      - campusnet
+
+  campusmgmtsystem:
+    image: yourusername/campusmgmtsystem
+    container_name: campusmgmtsystem
+    depends_on:
+      - tomcatserver
+    ports:
+      - "7007:7007"
+    networks:
+      - campusnet
+
+networks:
+  campusnet:
+    driver: bridge
+EOF
+
+# Step 5: Run docker-compose
+docker-compose up -d
+
+# Step 6: List running containers
+docker ps
+
+# Step 7: Access applications
+# Tomcat -> http://localhost:8086
+# CampusMgmtSystem -> http://localhost:7007
+
+# Step 8: Stop containers
+docker-compose down
