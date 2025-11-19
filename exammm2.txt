@@ -1,0 +1,441 @@
+passkey for gmail:
+https://myaccount.google.com/securit
+hcjm qbrx qymq firl
+ngrok config add-authtoken 35bsQW85eMFqV4v7PTgPjwyynT6_3GZUWwpfFwdr1aC7m6N2B
+
+
+-----aws commands:
+sudo apt update
+sudo apt-get install docker.io -y
+sudo apt install git -y
+sudo apt install nano -y
+git clone <your_github_url>
+cd <folder>
+ls
+nano Dockerfile
+FROM nginx:latest
+COPY . /usr/share/nginx/html
+Ctrl + O → Enter
+
+Ctrl + X
+
+sudo docker build -t mywebapp .
+sudo docker run -d -p 80:80 mywebapp
+curl http://localhost
+http://public key
+
+
+sudo docker ps
+sudo docker stop <id>
+----- maven
+sudo apt update -y
+sudo apt upgrade -y
+
+sudo apt install openjdk-11-jdk -y
+sudo apt install maven -y
+sudo apt install git -y
+sudo apt install docker.io -y
+sudo systemctl start docker
+sudo systemctl enable docker
+
+git clone https://github.com/yourname/mavenwebapp.git
+cd mavenwebapp
+ls
+mvn clean package
+mvn clean package
+nano Dockerfile
+FROM tomcat:9.0
+COPY target/*.war /usr/local/tomcat/webapps/ROOT.war
+
+sudo docker build -t mavenwebapp .
+
+sudo docker run -d -p 9090:8080 mavenwebapp
+sudo docker ps
+
+Add this rule in AWS → EC2 → Security Group:
+
+Type	Port	Source
+Custom TCP	9090	0.0.0.0/0
+http://EC2_PUBLIC_IP:9090
+
+
+
+
+
+
+
+
+minikube commands:
+✅ SECTION 1 — PRE-REQUISITE CHECK COMMANDS
+
+Run these first to confirm everything is installed.
+
+systeminfo | findstr /i "Virtualization"
+docker --version
+docker ps
+minikube version
+kubectl version --client
+
+✅ SECTION 2 — MINIKUBE STARTUP COMMANDS
+
+Start Minikube using Docker driver:
+
+minikube start --driver=docker
+minikube status
+kubectl get nodes
+
+
+Open Kubernetes Dashboard:
+
+minikube dashboard
+
+✅ SECTION 3 — DEPLOY NGINX ON MINIKUBE
+Create a deployment
+kubectl create deployment mynginx --image=nginx
+kubectl get deployments
+kubectl get pods
+
+✅ SECTION 4 — EXPOSE DEPLOYMENT AS A SERVICE
+kubectl expose deployment mynginx --type=NodePort --port=80
+kubectl get svc
+
+
+Get the URL and open NGINX in browser:
+
+minikube service mynginx
+
+
+If above doesn't open browser:
+
+minikube service mynginx --url
+
+
+Alternate (port-forward):
+
+kubectl port-forward svc/mynginx 8081:80
+
+
+Then visit: http://localhost:8081
+
+✅ SECTION 5 — SCALE THE DEPLOYMENT
+kubectl scale deployment mynginx --replicas=4
+kubectl get pods
+
+✅ SECTION 6 — DEBUG / LOGS (If asked)
+kubectl describe pod <pod-name>
+kubectl logs <pod-name>
+kubectl get events --sort-by=.metadata.creationTimestamp
+
+✅ SECTION 7 — CLEANUP COMMANDS
+kubectl delete service mynginx
+kubectl delete deployment mynginx
+minikube stop
+minikube delete
+
+✅ SECTION 8 — NAGIOS DOCKER COMMANDS
+Pull Nagios Image
+docker pull jasonrivers/nagios:latest
+
+Run Nagios Container
+docker run --name nagiosdemo -d -p 8888:80 jasonrivers/nagios:latest
+
+Check Running Container
+docker ps
+docker logs nagiosdemo
+
+Access Nagios Dashboard
+
+Open in browser:
+
+http://localhost:8888
+
+
+Login:
+
+Username: nagiosadmin
+
+Password: nagios
+
+✅ SECTION 9 — STOP/REMOVE NAGIOS
+docker stop nagiosdemo
+docker rm nagiosdemo
+
+
+Optional (remove image):
+
+docker rmi jasonrivers/nagios:latest
+
+
+
+tomcat details:
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!-- Note:  A "Server" is not itself a "Container", so you may not
+     define subcomponents such as "Valves" at this level.
+     Documentation at /docs/config/server.html
+ -->
+<Server port="8005" shutdown="SHUTDOWN">
+  <Listener className="org.apache.catalina.startup.VersionLoggerListener" />
+  <!-- Security listener. Documentation at /docs/config/listeners.html
+  <Listener className="org.apache.catalina.security.SecurityListener" />
+  -->
+  <!-- APR connector and OpenSSL support using Tomcat Native -->
+  <Listener className="org.apache.catalina.core.AprLifecycleListener" />
+  <!-- OpenSSL support using FFM API from Java 22 -->
+  <!-- <Listener className="org.apache.catalina.core.OpenSSLLifecycleListener" /> -->
+  <!-- Prevent memory leaks due to use of particular java/javax APIs-->
+  <Listener className="org.apache.catalina.core.JreMemoryLeakPreventionListener" />
+  <Listener className="org.apache.catalina.mbeans.GlobalResourcesLifecycleListener" />
+  <Listener className="org.apache.catalina.core.ThreadLocalLeakPreventionListener" />
+
+  <!-- Global JNDI resources
+       Documentation at /docs/jndi-resources-howto.html
+  -->
+  <GlobalNamingResources>
+    <!-- Editable user database that can also be used by
+         UserDatabaseRealm to authenticate users
+    -->
+    <Resource name="UserDatabase" auth="Container"
+              type="org.apache.catalina.UserDatabase"
+              description="User database that can be updated and saved"
+              factory="org.apache.catalina.users.MemoryUserDatabaseFactory"
+              pathname="conf/tomcat-users.xml" />
+  </GlobalNamingResources>
+
+  <!-- A "Service" is a collection of one or more "Connectors" that share
+       a single "Container" Note:  A "Service" is not itself a "Container",
+       so you may not define subcomponents such as "Valves" at this level.
+       Documentation at /docs/config/service.html
+   -->
+  <Service name="Catalina">
+
+    <!--The connectors can use a shared executor, you can define one or more named thread pools-->
+    <!--
+    <Executor name="tomcatThreadPool" namePrefix="catalina-exec-"
+        maxThreads="150" minSpareThreads="4"/>
+    -->
+
+
+    <!-- A "Connector" represents an endpoint by which requests are received
+         and responses are returned. Documentation at :
+         Java HTTP Connector: /docs/config/http.html
+         Java AJP  Connector: /docs/config/ajp.html
+         APR (HTTP/AJP) Connector: /docs/apr.html
+         Define a non-SSL/TLS HTTP/1.1 Connector on port 8080
+    -->
+    <Connector port="8081" protocol="HTTP/1.1"
+               connectionTimeout="20000"
+               redirectPort="8443"
+               maxParameterCount="1000"
+               />
+    <!-- A "Connector" using the shared thread pool-->
+    <!--
+    <Connector executor="tomcatThreadPool"
+               port="8080" protocol="HTTP/1.1"
+               connectionTimeout="20000"
+               redirectPort="8443"
+               maxParameterCount="1000"
+               />
+    -->
+    <!-- Define an SSL/TLS HTTP/1.1 Connector on port 8443
+         This connector uses the NIO implementation. The default
+         SSLImplementation will depend on the presence of the APR/native
+         library and the useOpenSSL attribute of the AprLifecycleListener.
+         Either JSSE or OpenSSL style configuration may be used regardless of
+         the SSLImplementation selected. JSSE style configuration is used below.
+    -->
+    <!--
+    <Connector port="8443" protocol="org.apache.coyote.http11.Http11NioProtocol"
+               maxThreads="150" SSLEnabled="true"
+               maxParameterCount="1000"
+               >
+        <SSLHostConfig>
+            <Certificate certificateKeystoreFile="conf/localhost-rsa.jks"
+                         certificateKeystorePassword="changeit" type="RSA" />
+        </SSLHostConfig>
+    </Connector>
+    -->
+    <!-- Define an SSL/TLS HTTP/1.1 Connector on port 8443 with HTTP/2
+         This connector uses the APR/native implementation which always uses
+         OpenSSL for TLS.
+         Either JSSE or OpenSSL style configuration may be used. OpenSSL style
+         configuration is used below.
+    -->
+    <!--
+    <Connector port="8443" protocol="org.apache.coyote.http11.Http11AprProtocol"
+               maxThreads="150" SSLEnabled="true"
+               maxParameterCount="1000"
+               >
+        <UpgradeProtocol className="org.apache.coyote.http2.Http2Protocol" />
+        <SSLHostConfig>
+            <Certificate certificateKeyFile="conf/localhost-rsa-key.pem"
+                         certificateFile="conf/localhost-rsa-cert.pem"
+                         certificateChainFile="conf/localhost-rsa-chain.pem"
+                         type="RSA" />
+        </SSLHostConfig>
+    </Connector>
+    -->
+
+    <!-- Define an AJP 1.3 Connector on port 8009 -->
+    <!--
+    <Connector protocol="AJP/1.3"
+               address="::1"
+               port="8009"
+               redirectPort="8443"
+               maxParameterCount="1000"
+               />
+    -->
+
+    <!-- An Engine represents the entry point (within Catalina) that processes
+         every request.  The Engine implementation for Tomcat stand alone
+         analyzes the HTTP headers included with the request, and passes them
+         on to the appropriate Host (virtual host).
+         Documentation at /docs/config/engine.html -->
+
+    <!-- You should set jvmRoute to support load-balancing via AJP ie :
+    <Engine name="Catalina" defaultHost="localhost" jvmRoute="jvm1">
+    -->
+    <Engine name="Catalina" defaultHost="localhost">
+
+      <!--For clustering, please take a look at documentation at:
+          /docs/cluster-howto.html  (simple how to)
+          /docs/config/cluster.html (reference documentation) -->
+      <!--
+      <Cluster className="org.apache.catalina.ha.tcp.SimpleTcpCluster"/>
+      -->
+
+      <!-- Use the LockOutRealm to prevent attempts to guess user passwords
+           via a brute-force attack -->
+      <Realm className="org.apache.catalina.realm.LockOutRealm">
+        <!-- This Realm uses the UserDatabase configured in the global JNDI
+             resources under the key "UserDatabase".  Any edits
+             that are performed against this UserDatabase are immediately
+             available for use by the Realm.  -->
+        <Realm className="org.apache.catalina.realm.UserDatabaseRealm"
+               resourceName="UserDatabase"/>
+      </Realm>
+
+      <Host name="localhost"  appBase="webapps"
+            unpackWARs="true" autoDeploy="true">
+
+        <!-- SingleSignOn valve, share authentication between web applications
+             Documentation at: /docs/config/valve.html -->
+        <!--
+        <Valve className="org.apache.catalina.authenticator.SingleSignOn" />
+        -->
+
+        <!-- Access log processes all example.
+             Documentation at: /docs/config/valve.html
+             Note: The pattern used is equivalent to using pattern="common" -->
+        <Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs"
+               prefix="localhost_access_log" suffix=".txt"
+               pattern="%h %l %u %t &quot;%r&quot; %s %b" />
+
+      </Host>
+    </Engine>
+  </Service>
+</Server>
+http://localhost:8081/mavenweb/
+
+ ------jemkinsss------
+2-sc
+pipeline {
+    agent any
+
+    stages {
+        stage('Build') {
+            steps {
+                echo "Building the project..."
+                sh 'mvn clean package'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                echo "Running tests..."
+                sh 'mvn test'
+            }
+        }
+    }
+}
+----------3-sc-----------
+pipeline {
+    agent any
+
+    stages {
+        stage('Build') {
+            steps {
+                echo "Building the project..."
+                sh 'mvn clean package'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                echo "Running tests..."
+                sh 'mvn test'
+            }
+        }
+
+        stage('Deploy to Tomcat') {
+            steps {
+                echo "Deploying WAR to Tomcat..."
+                deploy adapters: [tomcat9(
+                    credentialsId: 'tomcat-creds',
+                    path: '',
+                    url: 'http://localhost:8081'
+                )],
+                contextPath: '/mavenweb',
+                war: 'target/*.war'
+            }
+        }
+    }
+}
+
+--------------pipeline--------------
+node {
+  stage('Checkout') {
+    git branch: 'master', url: 'https://github.com/Hasininune/mavenwebproject.git'
+  }
+
+  stage('Build') {
+    bat 'mvn clean package'
+  }
+
+  stage('Test') {
+    bat 'mvn test'
+  }
+
+  stage('Deploy') {
+    // get username/password from Jenkins credentials
+    withCredentials([usernamePassword(credentialsId: 'tomcat-creds',
+                                      usernameVariable: 'TOMCAT_USER',
+                                      passwordVariable: 'TOMCAT_PASS')]) {
+      echo "Deploying WAR via Tomcat Manager (curl)..."
+      // ensure the WAR path matches what your build produces:
+      def warPath = 'target\\maven-webapp.war'
+
+      // curl -T to upload and deploy, update=true to replace existing app
+      bat """
+      curl -u %TOMCAT_USER%:%TOMCAT_PASS% -T ${warPath} "http://localhost:8081/manager/text/deploy?path=/mavenweb&update=true"
+      """
+    }
+  }
+}
+
+
